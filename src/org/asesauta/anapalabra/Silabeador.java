@@ -13,16 +13,16 @@ public class Silabeador
 	    {"ch", "@"},{"ll", "#"},{"gue", "%e"},{"gué", "%é"},{"gui", "%i"},{"guí", "%í"},
 	    {"qu", "&"},{"rr", "$"},{"ya","|a"},{"ye","|e"},{"yi","|i"},{"yo","|o"},{"yu","|u"}
 	  };
-	  String[] abiertas = {"a", "á", "e", "é", "o", "ó"};
-	  String[] cerradas = {"i", "u", "ü", "y"};
-	  String[] cerradas_tilde = {"í", "ú"};
+	  char[] abiertas = {'a', 'á', 'e', 'é', 'o', 'ó'};
+	  char[] cerradas = {'i', 'u', 'ü', 'y'};
+	  char[] cerradas_tilde = {'í', 'ú'};
 	  Pattern patron_tilde = Pattern.compile("á|é|í|ó|ú");
 	  Pattern patron_vocal_n_s = Pattern.compile(".*(á|é|í|ó|ú|a|e|i|o|u|n|s)");
-	  String enye = "ñ";
+	  char enye = 'ñ';
 	  
-	  public String[] getVocales() {
+	  public char[] getVocales() {
 		  int size = abiertas.length+cerradas.length+cerradas_tilde.length;
-		  String[] vocales = new String[size];
+		  char[] vocales = new char[size];
 		  int i = 0;
 		  for(int j = 0; j<abiertas.length; j++) {
 			  vocales[i]=abiertas[j];
@@ -39,9 +39,9 @@ public class Silabeador
 		  return vocales;
 	  }
 	  
-	  public String[] getTierrasRaras() {
+	  public char[] getTierrasRaras() {
 		  int size = getVocales().length+1;
-		  String[] raras = new String[size];
+		  char[] raras = new char[size];
 		  for(int i = 0; i<getVocales().length; i++) {
 			  raras[i]=abiertas[i];
 		  }
@@ -72,10 +72,9 @@ public class Silabeador
 	      corte = next_s(w)+1;
 	      silaba = unformat( w.substring(0,corte) );
 	      w = w.substring(corte);
-	      silabas<<silaba
+	      silabas.add(silaba);
 	    }
-	    logger.log(level, silabas.toString())
-	    silabas
+	    return silabas;
 	  }
 	  
 	  
@@ -86,77 +85,97 @@ public class Silabeador
 	    // excepción: subrayar
 		if (a[0]=='s' && a[1]=='u' && a[2]=='b' && a[3]=='r') return 2;
 
-	    int vocal = a.indexOf{ esVocal(it) }
+		int vocal=0;
+		boolean found=false;
+		while (vocal<a.length && !found) {
+			found = esVocal(a[vocal]);
+			vocal++;
+		}
 
 	    // sabemos que todas las letras anteriores a vocal + vocal forman parte de la sílaba... veamos las siguientes
 
 	    // vocal es la última vocal de la palabra: no hay más sílabas
-	    if (ultimaVocal(vocal, a)) return w.size()-1
+	    if (ultimaVocal(vocal, a)) return w.length()-1;
 	    
-	    def l1 = vocal+1
+	    int l1 = vocal+1;
 	    
 	    // l1 es la última letra
-	    if (l1+1==a.size())
+	    if (l1+1==a.length)
 	    {
-	        if (esVocal(a[l1]) && isHiato(a[vocal], a[l1])) return vocal
-	        else return l1
+	        if (esVocal(a[l1]) && isHiato(a[vocal], a[l1])) return vocal;
+	        else return l1;
 	    }
 
-	    def l2 = l1+1;
+	    int l2 = l1+1;
 	    if (esConsonante(a[l1]) && esVocal(a[l2])) // VCV
 	    {
-	        return vocal
+	        return vocal;
 	    }
 	    else if (esConsonante(a[l1]) && esConsonante(a[l2])) // VCC
 	    {
-	        if ( ['tr','gr','pr','br','bl','fr','fl','cl','dr','pl'].any{ it==a[l1].toString()+a[l2].toString() } ) return vocal // aTRapa
-	        if ( 'ns'==a[l1].toString()+a[l2].toString() )
+	    	String[] cc = {"tr","gr","pr","br","bl","fr","fl","cl","dr","pl"};
+	    	char[] tokenchar = {a[l1], a[2]};
+	    	String token = new String(tokenchar).toLowerCase();
+	    	for (String s: cc) {
+	    		if (s.equals(token)) return vocal;
+	    	}
+	    	if ("ns".equals(token))
 	        {
-	            if (a.size()>l2+1 && esConsonante(a[l2+1])) return l2 // caso traNSporte
+	            if (a.length>l2+1 && esConsonante(a[l2+1])) return l2; // caso traNSporte
 	        }
-	        return l1 // baRCo
+	        return l1; // baRCo
 	    }
 	    else if (esVocal(a[l1])) // VV?
 	    {
-	        logger.log(level, "VV?: ${a}")
-
-	        if (isHiato(a[vocal], a[l1])) return vocal
-	        else return vocal+next_s(w.substring(l1))+1
+	        if (isHiato(a[vocal], a[l1])) return vocal;
+	        else return vocal+next_s(w.substring(l1))+1;
 	    }
-	    return 0
+	    return 0;
 	  }
 	  
-	  def ultimaVocal(vocal, a)
+	  public boolean ultimaVocal(int vocal, char[] a)
 	  {
-	    for (def i=vocal+1; i<a.size(); i++)
+	    for (int i=vocal+1; i<a.length; i++)
 	    {
 	      if (esVocal(a[i]))
 	      {
-	        return false
+	        return false;
 	      }
 	    }
-	    return true
+	    return true;
 	  }
 	  
-	  def isHiato(v1, v2)
+	  public boolean isHiato(char v1, char v2)
 	  {
-	     return (
-	      cerradas_tilde.any{ it==v1 || it==v2 } // si una de ellas es cerrada y lleva tilde
-	      ||
-	      ( abiertas.any{ it==v1 } && abiertas.any{ it==v2 } ) // si las dos son abiertas
-	      ||
-	      (v1==v2) // si son iguales (aa, ii)
-	    )
+		  // si una de ellas es cerrada y lleva tilde
+		  for (char c: cerradas_tilde) {
+			  if (c==v1 || c==v2) return true;
+		  }
+		  // si las dos son abiertas
+		  for (char c1: abiertas) {
+			  if (c1==v1) {
+				  for (char c2: abiertas) {
+					  if (c2==v2) return true;
+				  }
+			  }
+		  }
+		// si son iguales (aa, ii)
+		  return (v1==v2);
 	  }
-	  def esVocal(l) {
-	    vocales.any{it==Character.toLowerCase(l)}
+
+	  public boolean esVocal(Character l) {
+		  for (char c: getVocales()) {
+			  if (Character.toLowerCase(l)==c) return true;
+		  }
+		  return false;
 	  }
-	  def esConsonante(l) {
-	    (!esVocal(l)) && (l==~/\D/)
+	  public boolean esConsonante(char l) {
+	    return (!esVocal(l));
 	  }
-	  def esValida(l) {
-	    !(l==~/\D/)
-	  }
+//	  public boolean esValida(char l) {
+//	    return Pattern.matches("\\D", l);
+//	    !(l==~/\D/)
+//	  }
 	  public String format(String w)
 	  {
 	    if (w==null) w = "";
@@ -173,19 +192,22 @@ public class Silabeador
 	    }
 	    return w;
 	  }
-	  def tonica(silabas)
+	  public int tonica(ArrayList<String> silabas)
 	  {
 	    if (silabas.size()==1) return 0;
 	    
-	    def ret = -1
+	    int ret = -1;
 	    // si una sílaba tiene tilde, esa es la tónica
-	    silabas.eachWithIndex { s, i -> 
-	       if (s.toLowerCase() =~ patron_tilde) ret = i;
+	    int i = 0;
+	    for(String silaba: silabas) {
+	    	if (patron_tilde.matcher(silaba).matches()) return i;
+	    	i++;
 	    }
-	    if (ret != -1) return ret
+
+	    if (ret != -1) return ret;
 	      
 	    // sólo puede ser aguda o llana
-	    def ultima = silabas[-1]
+	    String ultima = silabas[-1]
 	    if (ultima ==~ patron_vocal_n_s) return silabas.size()-2 // llana
 	    else return silabas.size()-1 // aguda
 	  }
