@@ -207,9 +207,9 @@ public class Silabeador
 	    if (ret != -1) return ret;
 	      
 	    // sólo puede ser aguda o llana
-	    String ultima = silabas[-1]
-	    if (ultima ==~ patron_vocal_n_s) return silabas.size()-2 // llana
-	    else return silabas.size()-1 // aguda
+	    String ultima = silabas.get(-1);
+	    if (patron_vocal_n_s.matcher(ultima).matches()) return silabas.size()-2; // llana
+	    else return silabas.size()-1; // aguda
 	  }
 
 	  /**
@@ -217,39 +217,45 @@ public class Silabeador
 	   * mía -> 1 (í)
 	   * mia -> 2 (a)
 	   */
-	  def vocalTonica(silaba)
+	  public int vocalTonica(String silaba)
 	  {
-	    def letras = silaba.toLowerCase().toCharArray()
-	    def ret = -1, j  = 0;
+	    char[] letras = silaba.toLowerCase().toCharArray();
+	    int ret = -1, j  = 0;
+	    Pattern patron_vocales_todas = Pattern.compile("a|e|i|o|u|á|é|í|ó|ú");
+	    Pattern patron_vocales_acentuadas = Pattern.compile("á|é|í|ó|ú");
+	    Pattern patron_vocales_abiertas = Pattern.compile("a|á|e|é|o|ó");
 
 	    // si hay sólo una vocal, es ésa: mas
-	    letras.eachWithIndex { s, i -> 
-	       if (s =~ /a|e|i|o|u|á|é|í|ó|ú/)
-	       {
-	         j++
-	         ret = i
-	       }
-	    }
-	   if (j==1) return ret
+	    for(int i=0; i<letras.length; i++) {
+	    	StringBuffer sb = new StringBuffer(letras[i]);
+	    	if (patron_vocales_todas.matcher(sb).matches())
+	    	{
+	    		j++;
+		        ret = i;
+		    }
+	   }
+	   if (j==1) return ret;
 	    
 	    // si hay una acentuada: día, aVIÓN
-	    ret = -1
-	    letras.eachWithIndex { s, i -> 
-	       if (s =~ /á|é|í|ó|ú/)
-	       {
-	         ret = i
-	       }
+	    ret = -1;
+	    for(int i=0; i<letras.length; i++) {
+	    	StringBuffer sb = new StringBuffer(letras[i]);
+	    	if (patron_vocales_acentuadas.matcher(sb).matches())
+	    	{
+		        ret = i;
+		    }
 	    }
-	    if (ret != -1) return ret
+	    if (ret != -1) return ret;
 
 	    // si no, la abierta: MIERda
-	    ret = -1
-	    letras.eachWithIndex { s, i -> 
-	       if (s =~ /a|á|e|é|o|ó/)
-	       {
-	         ret = i
-	       }
+	    ret = -1;
+	    for(int i=0; i<letras.length; i++) {
+	    	StringBuffer sb = new StringBuffer(letras[i]);
+	    	if (patron_vocales_abiertas.matcher(sb).matches())
+	    	{
+		        ret = i;
+		    }
 	    }
-	    return ret
+	    return ret;
 	  }
 	}
