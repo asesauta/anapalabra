@@ -198,16 +198,14 @@ public class Silabeador
 	    
 	    int ret = -1;
 	    // si una sílaba tiene tilde, esa es la tónica
-	    int i = 0;
-	    for(String silaba: silabas) {
-	    	if (patron_tilde.matcher(silaba).matches()) return i;
-	    	i++;
+	    for(int i=0; i<silabas.size(); i++) {
+	    	if (patron_tilde.matcher(silabas.get(i)).matches()) return i;
 	    }
 
 	    if (ret != -1) return ret;
 	      
 	    // sólo puede ser aguda o llana
-	    String ultima = silabas.get(-1);
+	    String ultima = silabas.get(silabas.size()-1);
 	    if (patron_vocal_n_s.matcher(ultima).matches()) return silabas.size()-2; // llana
 	    else return silabas.size()-1; // aguda
 	  }
