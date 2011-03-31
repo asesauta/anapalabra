@@ -1,6 +1,7 @@
 package org.asesauta.anapalabra;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -192,7 +193,7 @@ public class Silabeador
 	    }
 	    return w;
 	  }
-	  public int tonica(ArrayList<String> silabas)
+	  public int tonica(List<String> silabas)
 	  {
 	    if (silabas.size()==1) return 0;
 	    
