@@ -29,11 +29,11 @@ public class Silabeador
 			  i++;
 		  }
 		  for(int j = 0; j<cerradas.length; j++) {
-			  vocales[i]=abiertas[j];
+			  vocales[i]=cerradas[j];
 			  i++;
 		  }
 		  for(int j = 0; j<cerradas_tilde.length; j++) {
-			  vocales[i]=abiertas[j];
+			  vocales[i]=cerradas_tilde[j];
 			  i++;
 		  }
 		  return vocales;
@@ -89,7 +89,7 @@ public class Silabeador
 		boolean found=false;
 		while (vocal<a.length && !found) {
 			found = esVocal(a[vocal]);
-			vocal++;
+			if (!found) vocal++;
 		}
 
 	    // sabemos que todas las letras anteriores a vocal + vocal forman parte de la sílaba... veamos las siguientes

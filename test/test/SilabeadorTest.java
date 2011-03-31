@@ -30,8 +30,8 @@ public class SilabeadorTest {
 		testdata.add("perl");
 		for (String t : testdata) {
 			slbs = s.silabear(t);
-			assert (slbs.size() == 1);
-			assert slbs.get(0).equals(t);
+			assertTrue(slbs.size() == 1);
+			assertTrue(slbs.get(0).equals(t));
 		}
 	}
 
@@ -39,58 +39,58 @@ public class SilabeadorTest {
 	public void testHiatos() {
 		String w = "guía";
 		slbs = s.silabear(w);
-		assert slbs.size() == 2;
-		assert slbs.get(0).equals("guí");
-		assert slbs.get(1).equals("a");
+		assertTrue(slbs.size() == 2);
+		assertTrue(slbs.get(0).equals("guí"));
+		assertTrue(slbs.get(1).equals("a"));
 
 		w = "teatro";
 		slbs = s.silabear(w);
-		assert slbs.size() == 3;
-		assert slbs.get(0).equals("te");
-		assert slbs.get(1).equals("a");
-		assert slbs.get(2).equals("tro");
+		assertTrue(slbs.size() == 3);
+		assertTrue(slbs.get(0).equals("te"));
+		assertTrue(slbs.get(1).equals("a"));
+		assertTrue(slbs.get(2).equals("tro"));
 
 		w = "aéreo";
 		slbs = s.silabear(w);
-		assert slbs.size() == 4;
-		assert slbs.get(0).equals("a");
-		assert slbs.get(1).equals("é");
-		assert slbs.get(2).equals("re");
-		assert slbs.get(3).equals("o");
+		assertTrue(slbs.size() == 4);
+		assertTrue(slbs.get(0).equals("a"));
+		assertTrue(slbs.get(1).equals("é"));
+		assertTrue(slbs.get(2).equals("re"));
+		assertTrue(slbs.get(3).equals("o"));
 
 		w = "vigía";
 		slbs = s.silabear(w);
-		assert slbs.size() == 3;
-		assert slbs.get(0).equals("vi");
-		assert slbs.get(1).equals("gí");
-		assert slbs.get(2).equals("a");
+		assertTrue(slbs.size() == 3);
+		assertTrue(slbs.get(0).equals("vi"));
+		assertTrue(slbs.get(1).equals("gí"));
+		assertTrue(slbs.get(2).equals("a"));
 
 		w = "veo";
 		slbs = s.silabear(w);
-		assert slbs.size() == 2;
-		assert slbs.get(0).equals("ve");
-		assert slbs.get(1).equals("o");
+		assertTrue(slbs.size() == 2);
+		assertTrue(slbs.get(0).equals("ve"));
+		assertTrue(slbs.get(1).equals("o"));
 
 		w = "salías";
 		slbs = s.silabear(w);
-		assert slbs.size() == 3;
-		assert slbs.get(0).equals("sa");
-		assert slbs.get(1).equals("lí");
-		assert slbs.get(2).equals("as");
+		assertTrue(slbs.size() == 3);
+		assertTrue(slbs.get(0).equals("sa"));
+		assertTrue(slbs.get(1).equals("lí"));
+		assertTrue(slbs.get(2).equals("as"));
 
 		w = "caía";
 		slbs = s.silabear(w);
-		assert slbs.size() == 3;
-		assert slbs.get(0).equals("ca");
-		assert slbs.get(1).equals("í");
-		assert slbs.get(2).equals("a");
+		assertTrue(slbs.size() == 3);
+		assertTrue(slbs.get(0).equals("ca"));
+		assertTrue(slbs.get(1).equals("í"));
+		assertTrue(slbs.get(2).equals("a"));
 
 		w = "silabear";
 		slbs = s.silabear(w);
-		assert slbs.size() == 4;
-		assert slbs.get(0).equals("si");
-		assert slbs.get(1).equals("la");
-		assert slbs.get(2).equals("be");
-		assert slbs.get(3).equals("ar");
+		assertTrue(slbs.size() == 4);
+		assertTrue(slbs.get(0).equals("si"));
+		assertTrue(slbs.get(1).equals("la"));
+		assertTrue(slbs.get(2).equals("be"));
+		assertTrue(slbs.get(3).equals("ar"));
 	}
 }
