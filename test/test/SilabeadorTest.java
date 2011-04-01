@@ -16,14 +16,14 @@ public class SilabeadorTest
 	ArrayList<String> slbs = new ArrayList<String>();
 	ArrayList<String> testdata = new ArrayList<String>();
 
-//	@Test
+	@Test
 	public void testConversiones()
 	{
 		String w = "guitarra";
 		assertTrue(w.equals(s.unformat(s.format(w))));
 	}
 
-//	@Test
+	@Test
 	public void testMonosilabos()
 	{
 		testdata.add("sol");
