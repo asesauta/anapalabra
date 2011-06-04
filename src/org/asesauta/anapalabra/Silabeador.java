@@ -17,7 +17,7 @@ public class Silabeador
 	  char[] abiertas = {'a', 'á', 'e', 'é', 'o', 'ó'};
 	  char[] cerradas = {'i', 'u', 'ü', 'y'};
 	  char[] cerradas_tilde = {'í', 'ú'};
-	  Pattern patron_tilde = Pattern.compile("á|é|í|ó|ú");
+	  public Pattern patron_tilde = Pattern.compile(".*(á|é|í|ó|ú).*");
 	  Pattern patron_vocal_n_s = Pattern.compile(".*(á|é|í|ó|ú|a|e|i|o|u|n|s)");
 	  char enye = 'ñ';
 	  
@@ -115,7 +115,7 @@ public class Silabeador
 	    else if (esConsonante(a[l1]) && esConsonante(a[l2])) // VCC
 	    {
 	    	String[] cc = {"tr","gr","pr","br","bl","fr","fl","cl","dr","pl"};
-	    	char[] tokenchar = {a[l1], a[2]};
+	    	char[] tokenchar = {a[l1], a[l2]};
 	    	String token = new String(tokenchar).toLowerCase();
 	    	for (String s: cc) {
 	    		if (s.equals(token)) return vocal;
@@ -226,7 +226,8 @@ public class Silabeador
 
 	    // si hay sólo una vocal, es ésa: mas
 	    for(int i=0; i<letras.length; i++) {
-	    	StringBuffer sb = new StringBuffer(letras[i]);
+	    	StringBuffer sb = new StringBuffer();
+	    	sb.append(letras[i]);
 	    	if (patron_vocales_todas.matcher(sb).matches())
 	    	{
 	    		j++;
@@ -238,7 +239,8 @@ public class Silabeador
 	    // si hay una acentuada: día, aVIÓN
 	    ret = -1;
 	    for(int i=0; i<letras.length; i++) {
-	    	StringBuffer sb = new StringBuffer(letras[i]);
+	    	StringBuffer sb = new StringBuffer();
+	    	sb.append(letras[i]);
 	    	if (patron_vocales_acentuadas.matcher(sb).matches())
 	    	{
 		        ret = i;
@@ -249,7 +251,8 @@ public class Silabeador
 	    // si no, la abierta: MIERda
 	    ret = -1;
 	    for(int i=0; i<letras.length; i++) {
-	    	StringBuffer sb = new StringBuffer(letras[i]);
+	    	StringBuffer sb = new StringBuffer();
+	    	sb.append(letras[i]);
 	    	if (patron_vocales_abiertas.matcher(sb).matches())
 	    	{
 		        ret = i;
