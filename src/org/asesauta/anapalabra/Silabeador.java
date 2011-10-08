@@ -81,6 +81,7 @@ public class Silabeador
 	  
 	  public int next_s(String w)
 	  {
+		int hacheIntercalada = 0;
 	    char[] a = w.toCharArray();
 
 	    // excepción: subrayar
@@ -93,21 +94,29 @@ public class Silabeador
 			if (!found) vocal++;
 		}
 
-	    // sabemos que todas las letras anteriores a vocal + vocal forman parte de la sílaba... veamos las siguientes
+	    // sabemos que todas las letras anteriores a vocal + vocal forman parte de la sílaba, veamos las siguientes
 
 	    // vocal es la última vocal de la palabra: no hay más sílabas
 	    if (ultimaVocal(vocal, a)) return w.length()-1;
 	    
 	    int l1 = vocal+1;
+	    if (a[l1]=='h') {
+	    	l1++;
+	    	hacheIntercalada = 1;
+	    }
 	    
 	    // l1 es la última letra
 	    if (l1+1==a.length)
 	    {
 	        if (esVocal(a[l1]) && isHiato(a[vocal], a[l1])) return vocal;
-	        else return l1;
+	        else return l1+hacheIntercalada;
 	    }
 
 	    int l2 = l1+1;
+	    if (a[l2]=='h') {
+	    	l2++;
+	    	hacheIntercalada = 1;
+	    }
 	    if (esConsonante(a[l1]) && esVocal(a[l2])) // VCV
 	    {
 	        return vocal;
@@ -124,12 +133,12 @@ public class Silabeador
 	        {
 	            if (a.length>l2+1 && esConsonante(a[l2+1])) return l2; // caso traNSporte
 	        }
-	        return l1; // baRCo
+	        return l1+hacheIntercalada; // baRCo
 	    }
 	    else if (esVocal(a[l1])) // VV?
 	    {
-	        if (isHiato(a[vocal], a[l1])) return vocal;
-	        else return vocal+next_s(w.substring(l1))+1;
+	        if (isHiato(a[vocal], a[l1])) return vocal+hacheIntercalada;
+	        else return vocal+next_s(w.substring(l1))+1+hacheIntercalada;
 	    }
 	    return 0;
 	  }
@@ -173,16 +182,15 @@ public class Silabeador
 	  public boolean esConsonante(char l) {
 	    return (!esVocal(l));
 	  }
-//	  public boolean esValida(char l) {
-//	    return Pattern.matches("\\D", l);
-//	    !(l==~/\D/)
-//	  }
+
 	  public String format(String w)
 	  {
 	    if (w==null) w = "";
 	    for (int i=0; i<conversiones.length; i++) {
 	    	w = w.replace(conversiones[i][0], conversiones[i][1]);
 	    }
+	    // caso cacahuete, la h intercalada sí dividide sílaba
+	    if (w.startsWith("cacah")) w = w.replace("h", "¬");
 	    return w;
 	  }
 	  public String unformat(String w)
@@ -191,6 +199,8 @@ public class Silabeador
 	    for (int i=0; i<conversiones.length; i++) {
 	    	w = w.replace(conversiones[i][1], conversiones[i][0]);
 	    }
+	    // caso cacahuete, la h intercalada sí dividide sílaba
+	    w = w.replace("¬", "h");
 	    return w;
 	  }
 	  public int tonica(List<String> silabas)

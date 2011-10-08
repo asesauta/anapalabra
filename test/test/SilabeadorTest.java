@@ -364,4 +364,25 @@ public class SilabeadorTest
 		assertTrue((s.vocalTonica("ví") == 1));
 		assertTrue((s.vocalTonica("mier") == 2));
 	}
+	
+	/**
+	 * Bug Adriana Vega
+	 */
+	@Test
+	public void hacheIntercalada()
+	{
+		String w = "prohibido";
+		slbs = s.silabear(w);
+		assertTrue(slbs.size() == 3);
+		assertTrue(slbs.get(0).equals("prohi"));
+		assertTrue(slbs.get(1).equals("bi"));
+		assertTrue(slbs.get(2).equals("do"));
+
+		w = "alhelí";
+		slbs = s.silabear(w);
+		assertTrue(slbs.size() == 3);
+		assertTrue(slbs.get(0).equals("a"));
+		assertTrue(slbs.get(1).equals("lhe"));
+		assertTrue(slbs.get(2).equals("lí"));
+	}
 }
