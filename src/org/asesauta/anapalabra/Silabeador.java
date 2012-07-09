@@ -203,6 +203,12 @@ public class Silabeador
 	    w = w.replace("¬", "h");
 	    return w;
 	  }
+	  
+	  /**
+	   * Devuelve la tónica de un array de sílabas.
+	   * @param silabas
+	   * @return índice de la sílaba tónica
+	   */
 	  public int tonica(List<String> silabas)
 	  {
 	    if (silabas.size()==1) return 0;
